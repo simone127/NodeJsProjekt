@@ -1,0 +1,42 @@
+<body>
+  <div class="container">
+    <header>
+      <h1>TODO List</h1>
+    </header>
+
+    <div class="row">
+            {{> loginButtons}}
+    </div>
+
+    {{#if currentUser}}
+
+    <br>
+    <p>Still {{incompleteCount}} tasks need to be done. </p>
+    <div class="row">
+    <label class="hide-completed">
+      <input type="checkbox" />
+      Hide Completed Tasks
+    </label>
+    <br>
+    <div class="row">
+    <div class="col-sm-3">
+    <form class="input-group new-task">
+        <input type="text" name="text" class="form-control" placeholder="Add new Task">
+        <span class="input-group-btn">
+            <button class="btn btn-default new-task" type="submit">Add</button>
+        </span>
+    </form><!-- /input-group -->
+    </div>
+  </div>
+
+
+
+    <ul class="list-group">
+      {{#each tasks}}
+        {{> task}}
+      {{/each}}
+    </ul>
+  </div>
+    {{/if}}
+  </div>
+</body>
