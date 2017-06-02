@@ -17,14 +17,11 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
+  //insert new task
   'tasks.insert'(text) {
+    //check if text is a String
     check(text, String);
-
-    // Make sure the user is logged in before inserting a task
-    if (! Meteor.userId()) {
-      throw new Meteor.Error('not-authorized');
-    }
-
+    //insert into MongoDB Collection
     Tasks.insert({
       text,
       createdAt: new Date(),
@@ -32,42 +29,28 @@ Meteor.methods({
       username: Meteor.user().username,
     });
   },
+  //delete a task
   'tasks.remove'(taskId) {
     check(taskId, String);
-    const task = Tasks.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()) {
-      // If the task is private, make sure only the owner can delete it
-      throw new Meteor.Error('not-authorized');
-    }
+    //delete the task with the given taskId from the collection
     Tasks.remove(taskId);
   },
   'tasks.edited'(taskId,newTask){
     check(taskId, String);
     check(newTask, String);
-
+    //update the text field from the task with the given taskId
     Tasks.update(taskId, { $set: { text: newTask } });
   },
   'tasks.setChecked'(taskId, setChecked) {
     check(taskId, String);
     check(setChecked, Boolean);
-    const task = Tasks.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()) {
-      // If the task is private, make sure only the owner can check it off
-      throw new Meteor.Error('not-authorized');
-    }
+    //update if the task is done or not with the checked field in the collection
     Tasks.update(taskId, { $set: { checked: setChecked } });
   },
   'tasks.setPrivate'(taskId, setToPrivate) {
-  check(taskId, String);
-  check(setToPrivate, Boolean);
-
-  const task = Tasks.findOne(taskId);
-
-  // Make sure only the task owner can make a task private
-  if (task.owner !== Meteor.userId()) {
-    throw new Meteor.Error('not-authorized');
-  }
-
-  Tasks.update(taskId, { $set: { private: setToPrivate } });
+    check(taskId, String);
+    check(setToPrivate, Boolean);
+    //update if the task if private or public with the private field in the collection
+    Tasks.update(taskId, { $set: { private: setToPrivate } });
 },
 });

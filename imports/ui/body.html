@@ -9,7 +9,7 @@
     </div>
     {{#if currentUser}}
     <br>
-    <p>Still {{incompleteCount}} tasks need to be done. </p>
+    <p>Hey {{currentUser.username}}, still {{incompleteCount}} tasks need to be done. </p>
     <div class="row">
     <label class="hide-completed">
       <input type="checkbox" />
@@ -33,6 +33,8 @@
       {{/each}}
     </ul>
   </div>
+  {{else}}
+  <p>Please log in!</p>
     {{/if}}
   </div>
 </body>
